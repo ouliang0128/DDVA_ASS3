@@ -1,0 +1,130 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 70%;
+            height: 750px;
+            background-color: #FFFFFF;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#12c000", "font": {"color": "black","size":24}, "id": 0, "label": "James", "shape": "diamond", "title": "0\u003cbr\u003e Position:Director\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eDavid\u003cbr\u003eGeorge\u003cbr\u003e", "value": 2, "x": 867.3819117743229, "y": 390.8824924705703}, {"color": "#12c000", "font": {"color": "black","size":24}, "id": 1, "label": "David", "shape": "diamond", "title": "1\u003cbr\u003e Position:Director\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJames\u003cbr\u003eGeorge\u003cbr\u003e", "value": 2, "x": 1000.0, "y": 90.29147639041622}, {"color": "#12c000", "font": {"color": "black","size":24}, "id": 2, "label": "George", "shape": "star", "title": "2\u003cbr\u003e Position:CEO\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJames\u003cbr\u003eDavid\u003cbr\u003eRonald\u003cbr\u003eJohn\u003cbr\u003eRichard\u003cbr\u003e", "value": 5, "x": 146.5738788323343, "y": 62.35951860337943}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 3, "label": "Ronald", "shape": "triangle", "title": "3\u003cbr\u003e Position:Business Development Manager\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eAnthony\u003cbr\u003eGeorge\u003cbr\u003eDaniel\u003cbr\u003eKenneth\u003cbr\u003e", "value": 4, "x": -66.16686697980333, "y": 455.38087686627006}, {"color": "#8fc000", "font": {"color": "black","size":24}, "id": 4, "label": "John", "shape": "triangle", "title": "4\u003cbr\u003e Position:Business Support Manager\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eGeorge\u003cbr\u003eRobert\u003cbr\u003eCharles\u003cbr\u003ePaul\u003cbr\u003eMark\u003cbr\u003eKevin\u003cbr\u003eEdward\u003cbr\u003e", "value": 7, "x": -26.68534264899622, "y": -388.9326399367958}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 5, "label": "Richard", "shape": "triangle", "title": "5\u003cbr\u003e Position:Business Control Manager\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eMichael\u003cbr\u003eJason\u003cbr\u003eGeorge\u003cbr\u003eJoseph\u003cbr\u003e", "value": 4, "x": -217.88776472819762, "y": 103.97992480756078}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 6, "label": "Daniel", "shape": "dot", "title": "6\u003cbr\u003e Position:Sales Department Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eAnthony\u003cbr\u003eMichael\u003cbr\u003eRonald\u003cbr\u003eKenneth\u003cbr\u003e", "value": 4, "x": -214.63213897951925, "y": 496.4301048873989}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 7, "label": "Kenneth", "shape": "dot", "title": "7\u003cbr\u003e Position:Product Department Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eRonald\u003cbr\u003eDaniel\u003cbr\u003eAnthony\u003cbr\u003eMichael\u003cbr\u003eJason\u003cbr\u003e", "value": 5, "x": -123.45720969117495, "y": 530.3448173634199}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 8, "label": "Anthony", "shape": "dot", "title": "8\u003cbr\u003e Position:Marketing Department Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eMichael\u003cbr\u003eRonald\u003cbr\u003eDaniel\u003cbr\u003eKenneth\u003cbr\u003e", "value": 4, "x": -149.39216790794464, "y": 388.055002741273}, {"color": "#8fc000", "font": {"color": "black","size":24}, "id": 9, "label": "Robert", "shape": "dot", "title": "9\u003cbr\u003e Position:Project Office Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJohn\u003cbr\u003eCharles\u003cbr\u003ePaul\u003cbr\u003eMark\u003cbr\u003eKevin\u003cbr\u003eEdward\u003cbr\u003eMichael\u003cbr\u003e", "value": 7, "x": -69.05570394260718, "y": -469.59767809481104}, {"color": "#8fc000", "font": {"color": "black","size":24}, "id": 10, "label": "Charles", "shape": "dot", "title": "10\u003cbr\u003e Position:Professional Service Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJohn\u003cbr\u003eRobert\u003cbr\u003ePaul\u003cbr\u003eMark\u003cbr\u003eKevin\u003cbr\u003eEdward\u003cbr\u003eMichael\u003cbr\u003e", "value": 7, "x": -93.61182751383141, "y": -350.57012967831446}, {"color": "#8fc000", "font": {"color": "black","size":24}, "id": 11, "label": "Paul", "shape": "dot", "title": "11\u003cbr\u003e Position:QA Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJohn\u003cbr\u003eRobert\u003cbr\u003eCharles\u003cbr\u003eMark\u003cbr\u003eKevin\u003cbr\u003eMichael\u003cbr\u003e", "value": 6, "x": 20.566624838630133, "y": -343.22365257693605}, {"color": "#8fc000", "font": {"color": "black","size":24}, "id": 12, "label": "Mark", "shape": "dot", "title": "12\u003cbr\u003e Position:Design Office Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJohn\u003cbr\u003eRobert\u003cbr\u003eCharles\u003cbr\u003ePaul\u003cbr\u003eEdward\u003cbr\u003e", "value": 5, "x": -15.772598621387374, "y": -487.0630109265041}, {"color": "#8fc000", "font": {"color": "black","size":24}, "id": 13, "label": "Kevin", "shape": "dot", "title": "13\u003cbr\u003e Position:Technical Support Office Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJohn\u003cbr\u003eRobert\u003cbr\u003eCharles\u003cbr\u003ePaul\u003cbr\u003eMichael\u003cbr\u003e", "value": 5, "x": -69.65312519754774, "y": -252.57216593361443}, {"color": "#8fc000", "font": {"color": "black","size":24}, "id": 14, "label": "Edward", "shape": "dot", "title": "14\u003cbr\u003e Position:Software Development Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eJohn\u003cbr\u003eRobert\u003cbr\u003eCharles\u003cbr\u003eMark\u003cbr\u003eMichael\u003cbr\u003e", "value": 5, "x": -163.56531759526982, "y": -469.8096373146115}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 15, "label": "Joseph", "shape": "dot", "title": "15\u003cbr\u003e Position:Legal Office Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eMichael\u003cbr\u003eJason\u003cbr\u003eRichard\u003cbr\u003e", "value": 3, "x": -359.22010647766325, "y": 74.39444257701012}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 16, "label": "Michael", "shape": "dot", "title": "16\u003cbr\u003e Position:Finance Office Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eRichard\u003cbr\u003eDaniel\u003cbr\u003eKenneth\u003cbr\u003eAnthony\u003cbr\u003eRobert\u003cbr\u003eCharles\u003cbr\u003ePaul\u003cbr\u003eKevin\u003cbr\u003eEdward\u003cbr\u003eJoseph\u003cbr\u003eJason\u003cbr\u003e", "value": 11, "x": -174.1183128560709, "y": 27.588627399413614}, {"color": "#514000", "font": {"color": "black","size":24}, "id": 17, "label": "Jason", "shape": "dot", "title": "17\u003cbr\u003e Position:HR Office Leader\u003cbr\u003e Neighbors:\u003cbr\u003e\u003cbr\u003eMichael\u003cbr\u003eKenneth\u003cbr\u003eRichard\u003cbr\u003eJoseph\u003cbr\u003e", "value": 4, "x": -291.3039323052778, "y": 142.06163035487452}]);
+        edges = new vis.DataSet([{"color": "#C9C9C9", "from": 0, "label": "5", "length": 328.546064156509, "to": 1, "value": 0.36787944117144233}, {"color": "#C9C9C9", "from": 0, "label": "6", "length": 792.1436515634282, "to": 2, "value": 0.36787944117144233}, {"color": "#C9C9C9", "from": 1, "label": "5", "length": 853.8830941979728, "to": 2, "value": 0.36787944117144233}, {"color": "#C9C9C9", "from": 2, "label": "25", "length": 446.905373630159, "to": 3, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 2, "label": "36", "length": 483.40807832323964, "to": 4, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 2, "label": "53", "length": 366.83040746296547, "to": 5, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 3, "label": "150", "length": 154.0356326019414, "to": 6, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 3, "label": "213", "length": 94.34922226943175, "to": 7, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 3, "label": "298", "length": 107.04776523251026, "to": 8, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 4, "label": "345", "length": 91.11583779555113, "to": 9, "value": 0.0024787521766663585}, {"color": "#C9C9C9", "from": 4, "label": "123", "length": 77.14166558802772, "to": 10, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 4, "label": "212", "length": 65.74237565615891, "to": 11, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 4, "label": "453", "length": 98.73529101992811, "to": 12, "value": 0.0009118819655545162}, {"color": "#C9C9C9", "from": 4, "label": "156", "length": 142.96995910859005, "to": 13, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 4, "label": "278", "length": 158.9881009577248, "to": 14, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 5, "label": "300", "length": 144.3957464165824, "to": 15, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 5, "label": "78", "length": 88.04200836468016, "to": 16, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 5, "label": "256", "length": 82.70519910560776, "to": 17, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 6, "label": "78", "length": 97.27834010233603, "to": 7, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 6, "label": "145", "length": 126.4967058488209, "to": 8, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 7, "label": "139", "length": 144.6340672279893, "to": 8, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 9, "label": "34", "length": 121.53419472266508, "to": 10, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 9, "label": "134", "length": 154.92758354071336, "to": 11, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 9, "label": "546", "length": 56.07251700783564, "to": 12, "value": 0.0009118819655545162}, {"color": "#C9C9C9", "from": 9, "label": "23", "length": 217.0263344412045, "to": 13, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 9, "label": "145", "length": 94.50985133564868, "to": 14, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 10, "label": "256", "length": 114.41455199145085, "to": 11, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 10, "label": "222", "length": 157.1281393831248, "to": 12, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 10, "label": "190", "length": 100.88419259124711, "to": 13, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 10, "label": "56", "length": 138.24453318638118, "to": 14, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 11, "label": "78", "length": 148.35868755179973, "to": 12, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 11, "label": "112", "length": 127.89564233090482, "to": 13, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 12, "label": "98", "length": 148.79639337929044, "to": 14, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 15, "label": "88", "length": 190.92788779109742, "to": 16, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 15, "label": "128", "length": 95.87207630993792, "to": 17, "value": 0.018315638888734182}, {"color": "#C9C9C9", "from": 16, "label": "238", "length": 163.8186125302473, "to": 17, "value": 0.006737946999085467}, {"color": "#C9C9C9", "from": 17, "label": "5", "length": 423.00869448015914, "to": 7, "value": 0.36787944117144233}, {"color": "#C9C9C9", "from": 16, "label": "15", "length": 470.5886750871487, "to": 6, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 16, "label": "23", "length": 505.3022203800496, "to": 7, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 16, "label": "54", "length": 361.313423492809, "to": 8, "value": 0.049787068367863944}, {"color": "#C9C9C9", "from": 16, "label": "18", "length": 508.16569557842047, "to": 9, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 16, "label": "23", "length": 418.8125737683246, "to": 11, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 16, "label": "41", "length": 299.00342063849723, "to": 13, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 16, "label": "13", "length": 497.51020034718675, "to": 14, "value": 0.1353352832366127}, {"color": "#C9C9C9", "from": 16, "label": "27", "length": 386.6333401773991, "to": 10, "value": 0.1353352832366127}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges",
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.0,
+            "damping": 0.09,
+            "nodeDistance": 120,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
